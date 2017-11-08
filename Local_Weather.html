@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+	
+	<main>
+		<p class="demo"></p>
+	</main>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script>
+		var api;
+		var lat, lon;
+		var x = $(".demo");
+
+		function getLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(getPosition);
+			} else { 
+				x.text("Geolocation is not supported by this browser.");
+			}
+		}
+
+		function getPosition(position) {
+			x.text("Latitude: " + position.coords.latitude + 
+			"<br>Longitude: " + position.coords.longitude); 
+			api = "https://fcc-weather-api.glitch.me/api/current?";
+			lat = position.coords.latitude;
+			lon = position.coords.longitude;
+			getWeather(lat, lon);
+		}
+		function getWeather(lat, lon) {
+			var urlString = api + "lat=" + lat + "&" + "lon="+ lon;
+			$.ajax(urlString)
+			.done(function (data) {
+				console.log(data)
+				x.text(data);
+				var t = data.main.temp;
+				var l = data.name;
+				x.text("la température à " + l + " est: " + t + "°C");
+			})
+		}
+		getLocation();
+	</script>
+
+
+</body>
+</html>
